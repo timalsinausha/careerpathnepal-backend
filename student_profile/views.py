@@ -26,9 +26,7 @@ class StudentProfileAPIView(APIView):
 class StudentProfileUpdateAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
-
     def patch(self, request):
-
         profile = request.user.student_profile
 
         serializer = StudentProfileUpdateSerializer(
@@ -40,8 +38,6 @@ class StudentProfileUpdateAPIView(APIView):
         if serializer.is_valid():
 
             profile = serializer.save()
-
-            profile.update_profile_completion_status()
 
             return Response(
                 {
