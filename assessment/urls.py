@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    AssessmentResultAPIView,
     StartAssessmentAPIView,
     AssessmentQuestionListAPIView,
     SubmitAssessmentAnswerAPIView,
@@ -41,6 +42,12 @@ urlpatterns = [
     "progress/",
     AssessmentProgressAPIView.as_view(),
     name="progress-assessment"
+    ),
+#GET http://127.0.0.1:8000/api/assessment/result/
+    path(
+    "result/",
+    AssessmentResultAPIView.as_view(),
+    name="assessment-result",
     ),
 
 

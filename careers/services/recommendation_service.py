@@ -221,7 +221,7 @@ class CareerRecommendationService:
             
             "minimum_education_level": career.minimum_education_level,
             "recommended_courses": self.get_recommended_courses(career),
-           # "top_colleges": self.get_top_colleges(career),
+           "top_colleges": self.get_top_colleges(career),
             "next_step": self.get_next_step(
                 career,
                 eligible,
@@ -230,44 +230,47 @@ class CareerRecommendationService:
     
 
 
-    # def get_top_colleges(self, career):
+    def get_top_colleges(self, career):
 
-    #     course_ids = (
-    #         CareerCourse.objects.filter(
-    #             career=career,
-    #         )
-    #         .values_list(
-    #             "course_id",
-    #             flat=True,
-    #         )
-    #     )
+        course_ids = (
+            CareerCourse.objects.filter(
+                career=career,
+            )
+            .values_list(
+                "course_id",
+                flat=True,
+            )
+        )
 
-    #     college_courses = (
-    #         CollegeCourse.objects.filter(
-    #             course_id__in=course_ids,
-    #             is_available=True,
-    #             college__is_active=True,
-    #         )
-    #         .select_related(
-    #             "college",
-    #             "college__province",
-    #             "college__district",
-    #         )
-    #         .distinct()[:5]
-    #     )
+        college_courses = (
+            CollegeCourse.objects.filter(
+                course_id__in=course_ids,
+                is_available=True,
+                college__is_active=True,
+            )
+            .select_related(
+                "college",
+                "college__province",
+                "college__district",
+            )
+            
+        )
 
-    #     colleges = []
+        unique_colleges = {}
 
-    #     for college_course in college_courses:
+        # colleges = []
 
-    #         colleges.append(
-    #             {
-    #                 "id": college_course.college.id,
-    #                 "name": college_course.college.name,
-    #                 "province": college_course.college.province.name,
-    #                 "district": college_course.college.district.name,
-    #                 "address": college_course.college.address,
-    #             }
-    #         )
+        for college_course in college_courses:
+            college = college_course.college
+            if college.id not in unique_colleges:
 
-    #     return colleges
+                unique_colleges[college.id]=  {
+                        "id": college_course.college.id,
+                        "name": college_course.college.name,
+                        "province": college_course.college.province.name,
+                        "district": college_course.college.district.name,
+                        "address": college_course.college.address,
+                    }
+            
+
+        return list(unique_colleges.values())[:5]

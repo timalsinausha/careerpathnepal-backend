@@ -4,6 +4,7 @@ from assessment.models import (
     StudentAnswer,
     OptionScore,
     StudentAttributeScore,
+    AssessmentAttribute
 )
 
 
@@ -21,7 +22,16 @@ class AssessmentScoringService:
             "selected_option"
         )
 
-        attribute_scores = {}
+        # attribute_scores = {}
+        attribute_scores = {
+            attribute.id: {
+                "attribute": attribute,
+                "score": 0,
+            }
+            for attribute in AssessmentAttribute.objects.filter(
+                is_active=True
+            )
+        }
 
         for answer in answers:
 

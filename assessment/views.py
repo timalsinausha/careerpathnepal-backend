@@ -284,38 +284,7 @@ class CompleteAssessmentAPIView(APIView):
           attempt
         ).calculate()
 
-        """ attribute_scores = {}
-
-        for answer in answers:
-
-            option_scores = OptionScore.objects.filter(
-                option=answer.selected_option
-            ).select_related(
-                "attribute"
-            )
-
-            for option_score in option_scores:
-
-                attribute_id = (
-                    option_score.attribute.id
-                )
-
-                if attribute_id not in attribute_scores:
-
-                    attribute_scores[
-                        attribute_id
-                    ] = {
-                        "attribute": (
-                            option_score.attribute
-                        ),
-                        "score": 0,
-                    }
-
-                attribute_scores[
-                    attribute_id
-                ]["score"] += option_score.score
-                """
-
+        # print(attribute_scores)
         for data in attribute_scores.values():
 
             StudentAttributeScore.objects.update_or_create(
@@ -328,6 +297,11 @@ class CompleteAssessmentAPIView(APIView):
                     "score": data["score"],
                 },
 
+            )
+            print(
+                StudentAttributeScore.objects.filter(
+                    attempt=attempt
+                ).count()
             )
 
         PercentageCalculatorService.calculate(
@@ -525,5 +499,55 @@ class AssessmentProgressAPIView(APIView):
 
             },
 
+            status=status.HTTP_200_OK,
+        )
+    
+
+class AssessmentResultAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        attempt_id = request.query_params.get(
+            "attempt_id"
+        )
+
+        if not attempt_id:
+
+            return Response(
+                {
+                    "error": "attempt_id is required."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+
+            attempt = AssessmentAttempt.objects.get(
+                id=attempt_id,
+                student=request.user.student_profile,
+                is_completed=True,
+            )
+
+        except AssessmentAttempt.DoesNotExist:
+
+            return Response(
+                {
+                    "error": "Completed assessment not found."
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        results = AssessmentResultService.get_results(
+            attempt
+        )
+
+        return Response(
+            {
+                "attempt_id": attempt.id,
+                "completed_at": attempt.completed_at,
+                "results": results,
+            },
             status=status.HTTP_200_OK,
         )
