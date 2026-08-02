@@ -6,7 +6,8 @@ from .views import (
     AssessmentQuestionListAPIView,
     SubmitAssessmentAnswerAPIView,
     CompleteAssessmentAPIView,
-    AssessmentProgressAPIView
+    AssessmentProgressAPIView,
+    AssessmentStatusAPIView
 )
 
 
@@ -49,7 +50,13 @@ urlpatterns = [
     AssessmentResultAPIView.as_view(),
     name="assessment-result",
     ),
-
+    
+    #GET http://127.0.0.1:8000/api/assessment/status/
+    path(
+    "status/",
+    AssessmentStatusAPIView.as_view(),
+    name="assessment-status",
+),
 
 
 ]

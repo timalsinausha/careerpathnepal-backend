@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from decimal import Decimal
 from careers.models import Career
 
 
@@ -41,6 +41,11 @@ class RecommendationSerializer(serializers.Serializer):
     career = CareerRecommendationCareerSerializer()
    # career = serializers.CharField(source="career.name")
     match_score = serializers.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
+
+    display_match_score = serializers.DecimalField(
         max_digits=5,
         decimal_places=2,
     )

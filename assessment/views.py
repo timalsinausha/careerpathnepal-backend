@@ -326,11 +326,13 @@ class CompleteAssessmentAPIView(APIView):
 
         return Response(
             {
+                "has_result": True,
                 "message": (
                     "Assessment completed successfully."
                 ),
 
                 "attempt_id": attempt.id,
+                "completed_at": attempt.completed_at,
                 "results":results,
 
 
@@ -509,45 +511,63 @@ class AssessmentResultAPIView(APIView):
 
     def get(self, request):
 
-        attempt_id = request.query_params.get(
-            "attempt_id"
-        )
-
-        if not attempt_id:
-
-            return Response(
-                {
-                    "error": "attempt_id is required."
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        try:
-
-            attempt = AssessmentAttempt.objects.get(
-                id=attempt_id,
+        # Get the latest completed assessment
+        attempt = (
+            AssessmentAttempt.objects.filter(
                 student=request.user.student_profile,
                 is_completed=True,
             )
+            .order_by("-completed_at")
+            .first()
+        )
 
-        except AssessmentAttempt.DoesNotExist:
+        # If the student has never completed an assessment
+        if not attempt:
 
             return Response(
                 {
-                    "error": "Completed assessment not found."
+                    "has_result": False,
+                    "message": "No completed assessment found.",
                 },
-                status=status.HTTP_404_NOT_FOUND,
+                status=status.HTTP_200_OK,
             )
 
+        # Generate grouped results
         results = AssessmentResultService.get_results(
             attempt
         )
 
         return Response(
             {
+                "has_result": True,
                 "attempt_id": attempt.id,
                 "completed_at": attempt.completed_at,
                 "results": results,
             },
             status=status.HTTP_200_OK,
         )
+    
+class AssessmentStatusAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        attempt = (
+            AssessmentAttempt.objects
+            .filter(student=request.user.student_profile)
+            .order_by("-started_at")
+            .first()
+        )
+
+        if attempt is None:
+            return Response({
+                "has_attempt": False,
+                "attempt_id": None,
+                "is_completed": False,
+            })
+
+        return Response({
+            "has_attempt": True,
+            "attempt_id": attempt.id,
+            "is_completed": attempt.is_completed,
+        })

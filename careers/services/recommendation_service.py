@@ -40,6 +40,7 @@ class CareerRecommendationService:
 
     def get_student_scores(self):
      attempt = self.get_latest_attempt()
+     print("Recommendation attempt:", attempt.id)
 
      if not attempt:
         return []
@@ -54,6 +55,12 @@ class CareerRecommendationService:
     def calculate_match_score(self, career,student_scores):
 
         #student_scores = self.get_student_scores()
+        for s in student_scores:
+            print(
+                s.attribute.name,
+                s.score,
+                s.percentage,
+            )
 
         if not student_scores:
             return 0
@@ -65,6 +72,7 @@ class CareerRecommendationService:
 
         total_score = 0
         total_weight = 0
+        print(f"\n===== {career.name} =====")
 
         for student_score in student_scores:
 
@@ -75,12 +83,24 @@ class CareerRecommendationService:
             if not career_weight:
                 continue
 
+            print(
+                student_score.attribute.name,
+                "| percentage:", student_score.percentage,
+                "| weight:", career_weight.weight,
+                "| contribution:",
+                student_score.percentage * career_weight.weight,
+            )
+
             total_score += (
                 student_score.percentage
                 * career_weight.weight
             )
 
             total_weight += career_weight.weight
+
+            print("Total Score:", total_score)
+            print("Total Weight:", total_weight)
+            print("Match:", round(total_score / total_weight, 2))
 
         if total_weight == 0:
             return 0
@@ -212,13 +232,22 @@ class CareerRecommendationService:
         career,
         match_score,
         eligible,
-        ):
+    ):
+
+        display_match_score = 0
+
+        if match_score > 0:
+
+            display_match_score = round(
+                40 + (float(match_score) * 0.6),
+                2,
+            )
 
         return {
             "career": career,
             "match_score": match_score,
+            "display_match_score": display_match_score,
             "eligible": eligible,
-            
             "minimum_education_level": career.minimum_education_level,
             "recommended_courses": self.get_recommended_courses(career),
            "top_colleges": self.get_top_colleges(career),
