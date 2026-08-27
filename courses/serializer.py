@@ -96,3 +96,35 @@ class CourseCollegeSerializer(serializers.ModelSerializer):
             "district",
             "address",
         )
+
+class CollegeCourseSerializer(serializers.ModelSerializer):
+
+    id = serializers.IntegerField(
+        source="course.id",
+        read_only=True,
+    )
+
+    name = serializers.CharField(
+        source="course.name",
+        read_only=True,
+    )
+
+    short_name = serializers.CharField(
+        source="course.short_name",
+        read_only=True,
+    )
+
+    slug = serializers.CharField(
+        source="course.slug",
+        read_only=True,
+    )
+
+    class Meta:
+        model = CollegeCourse
+
+        fields = (
+            "id",
+            "name",
+            "short_name",
+            "slug",
+        )

@@ -18,6 +18,7 @@ class RecommendedCourseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     short_name= serializers.CharField()
+    slug = serializers.CharField()
     is_primary = serializers.BooleanField()
 
 
@@ -27,6 +28,12 @@ class RecommendedCollegeSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
     name = serializers.CharField()
+
+    short_name = serializers.CharField(
+        allow_blank=True,
+    )
+
+    slug = serializers.CharField()
 
     province = serializers.CharField()
 

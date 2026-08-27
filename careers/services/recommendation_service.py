@@ -219,6 +219,7 @@ class CareerRecommendationService:
             {
                 "id": career_course.course.id,
                 "name": career_course.course.name,
+                "slug":career_course.course.slug,
                 "short_name": career_course.course.short_name,
                 "is_primary": career_course.is_primary,
             }
@@ -296,6 +297,8 @@ class CareerRecommendationService:
                 unique_colleges[college.id]=  {
                         "id": college_course.college.id,
                         "name": college_course.college.name,
+                        "short_name": college.short_name,
+                        "slug": college.slug,
                         "province": college_course.college.province.name,
                         "district": college_course.college.district.name,
                         "address": college_course.college.address,
