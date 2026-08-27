@@ -34,4 +34,5 @@ urlpatterns = [
     path("api/student-profile/",include("student_profile.urls"),),
     path("api/assessment/", include("assessment.urls")),
     path("api/careers/",include("careers.urls"),),
+    path("api/courses/",include("courses.urls"),),
 ]

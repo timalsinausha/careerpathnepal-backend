@@ -60,6 +60,11 @@ class CareerCourseSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    slug = serializers.CharField(
+        source="course.slug",
+        read_only=True,
+    )
+
     class Meta:
 
         model = CareerCourse
@@ -68,5 +73,6 @@ class CareerCourseSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "short_name",
+            "slug",
             "is_primary",
         )
