@@ -128,3 +128,13 @@ class CollegeCourseSerializer(serializers.ModelSerializer):
             "short_name",
             "slug",
         )
+
+
+class CourseListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = [
+            "id",
+            "name",
+            "slug",
+        ]

@@ -49,3 +49,12 @@ class CollegeDetailSerializer(serializers.ModelSerializer):
             "ownership",
             "courses",
         )
+
+class CollegeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = College
+        fields = [
+            "id",
+            "name",
+            "slug",
+        ]

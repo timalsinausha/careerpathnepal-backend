@@ -43,3 +43,15 @@ class CareerDetailSerializer(serializers.ModelSerializer):
             colleges,
             many=True,
         ).data
+
+
+
+class CareerListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Career
+        fields = (
+            "id",
+            "name",
+            "slug",
+        )

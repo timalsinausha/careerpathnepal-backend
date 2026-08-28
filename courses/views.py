@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 
 from .models import Course
-from .serializer import CourseDetailSerializer
+from .serializer import CourseDetailSerializer, CourseListSerializer
 
 
 class CourseDetailAPIView(APIView):
@@ -34,3 +34,15 @@ class CourseDetailAPIView(APIView):
             serializer.data,
             status=status.HTTP_200_OK,
         )
+    
+class CourseListAPIView(APIView):
+
+    def get(self, request):
+        courses = Course.objects.all()
+
+        serializer = CourseListSerializer(
+            courses,
+            many=True
+        )
+
+        return Response(serializer.data)

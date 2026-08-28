@@ -4,10 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
 from careers.models import Career
 from careers.serializers.recommendation_serializers import RecommendationSerializer
-from careers.serializers.details import CareerDetailSerializer
+from careers.serializers.details import CareerDetailSerializer, CareerListSerializer
 from careers.services.recommendation_service import (
     CareerRecommendationService,
 )
+from rest_framework.generics import ListAPIView
 
 
 class RecommendationAPIView(APIView):
@@ -44,3 +45,12 @@ class CareerDetailAPIView(RetrieveAPIView):
     )
 
     lookup_field = "slug"
+
+
+class CareerListAPIView(ListAPIView):
+
+    serializer_class = CareerListSerializer
+
+    queryset = Career.objects.filter(
+        is_active=True
+    ).order_by("name")

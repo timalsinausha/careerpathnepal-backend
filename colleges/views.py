@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 
 from .models import College
-from .serializer import CollegeDetailSerializer
+from .serializer import CollegeDetailSerializer, CollegeListSerializer
 
 
 class CollegeDetailAPIView(APIView):
@@ -37,3 +37,15 @@ class CollegeDetailAPIView(APIView):
             serializer.data,
             status=status.HTTP_200_OK,
         )
+    
+
+class CollegeListAPIView(APIView):
+    def get(self, request):
+        colleges = College.objects.all()
+
+        serializer = CollegeListSerializer(
+            colleges,
+            many=True
+        )
+
+        return Response(serializer.data)
