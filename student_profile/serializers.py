@@ -87,4 +87,4 @@ class CombinedProfileSerializer(serializers.Serializer):
 
     user = UserProfileSerializer()
 
-    student_profile = StudentProfileSerializer()
+    student_profile = StudentProfileSerializer() 
