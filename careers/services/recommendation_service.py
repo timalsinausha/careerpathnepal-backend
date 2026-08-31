@@ -40,10 +40,13 @@ class CareerRecommendationService:
 
     def get_student_scores(self):
      attempt = self.get_latest_attempt()
-     print("Recommendation attempt:", attempt.id)
+     
 
      if not attempt:
+        print("Recommendation: No completed assessment found.")
         return []
+     
+     print("Recommendation attempt:", attempt.id)
 
      return (
         StudentAttributeScore.objects.filter(
@@ -124,6 +127,9 @@ class CareerRecommendationService:
         )
 
         student_scores = self.get_student_scores()
+
+        if not student_scores:
+         return []
 
         for career in careers:
 
