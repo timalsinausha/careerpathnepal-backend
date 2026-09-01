@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import RegisterAPIView, LoginAPIView, UserProfileAPIView, ChangePasswordAPIView, UserProfileUpdateAPIView
+from .views import ForgotPasswordAPIView, RegisterAPIView, LoginAPIView, ResetPasswordAPIView, UserProfileAPIView, ChangePasswordAPIView, UserProfileUpdateAPIView, VerifyOTPAPIView
 
 urlpatterns = [
     #http://127.0.0.1:8000/api/register/
@@ -23,6 +23,15 @@ urlpatterns = [
     
     # PATCH http://127.0.0.1:8000/api/student-profile/update/
     path("updated-profile/", UserProfileUpdateAPIView.as_view(), name="updated-profile"),
+
+    # POST http://127.0.0.1:8000/api/forgot-password/
+    path("forgot-password/",ForgotPasswordAPIView.as_view(),name="forgot-password",),
+
+    #POST http://127.0.0.1:8000/api/verify-otp/
+    path("verify-otp/",VerifyOTPAPIView.as_view(),name="verify-otp",),
+
+# POST http://127.0.0.1:8000/api/reset-password/
+    path("reset-password/",ResetPasswordAPIView.as_view(),name="reset-password",),
 
             
     
