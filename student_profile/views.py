@@ -38,6 +38,7 @@ class StudentProfileUpdateAPIView(APIView):
         if serializer.is_valid():
 
             profile = serializer.save()
+            profile.update_profile_completion_status()
 
             return Response(
                 {
